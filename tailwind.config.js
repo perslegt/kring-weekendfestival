@@ -7,20 +7,23 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        void: "#0B0B10",
-        ink: "#16161D",
-        panel: "#1C1C24",
+        void: "#062D47",
+        ink: "#0B4161",
+        panel: "#F6D48A",
         magenta: {
-          DEFAULT: "#FF2E92",
-          dim: "#B81F68",
+          DEFAULT: "#E72F68",
+          dim: "#A91E4B",
         },
         violet: {
-          DEFAULT: "#8B5CF6",
-          dim: "#5B3AA8",
+          DEFAULT: "#0B4161",
+          dim: "#062D47",
         },
-        acid: "#E8FF3C",
-        bone: "#F1EFE7",
-        concrete: "#7A7A85",
+        acid: "#FFB51F",
+        bone: "#FFF1D2",
+        concrete: "#6D5A43",
+        sunset: "#F7941D",
+        sky: "#0A6080",
+        grass: "#6F8E19",
       },
       fontFamily: {
         display: ["var(--font-anton)", "sans-serif"],

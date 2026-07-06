@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -16,8 +17,15 @@ export default function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-bone/10 bg-void/85 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-        <a href="#top" className="font-display text-xl tracking-wide text-bone">
-          KRING<span className="text-magenta">.</span>27
+        <a href="#top" className="relative block h-8 w-36 sm:h-9 sm:w-40">
+          <Image
+            src="/het-kring-header-logo.png"
+            alt="Het Kring"
+            fill
+            priority
+            sizes="160px"
+            className="object-contain object-left"
+          />
         </a>
 
         <nav className="hidden items-center gap-8 font-mono text-xs uppercase tracking-[0.2em] text-bone/80 md:flex">

@@ -11,14 +11,16 @@ export default function Home() {
     <main className="relative">
       <Header />
       <Hero />
-      <div className="tape-divider" aria-hidden="true" />
-      <Presale />
-      <div className="tape-divider" aria-hidden="true" />
-      <CampingTypes />
-      <WeekendVibe />
-      <div className="tape-divider" aria-hidden="true" />
-      <FAQ />
-      <Footer />
+      <div className="site-background">
+        <div className="tape-divider" aria-hidden="true" />
+        <Presale />
+        <div className="tape-divider" aria-hidden="true" />
+        <CampingTypes />
+        <WeekendVibe />
+        <div className="tape-divider" aria-hidden="true" />
+        <FAQ />
+        <Footer />
+      </div>
     </main>
   );
 }
