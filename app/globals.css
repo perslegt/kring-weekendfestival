@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0b0b10;
+  color: #f1efe7;
+}
+
+/* Vaste korrel/grain overlay over de hele pagina, zoals een gefotokopieerde flyer */
+.grain-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E");
+}
+
+/* Neon gloed voor tekst */
+.glow-magenta {
+  text-shadow: 0 0 12px rgba(255, 46, 146, 0.85), 0 0 32px rgba(255, 46, 146, 0.45), 0 0 64px rgba(255, 46, 146, 0.25);
+}
+
+.glow-violet {
+  text-shadow: 0 0 12px rgba(139, 92, 246, 0.85), 0 0 32px rgba(139, 92, 246, 0.45);
+}
+
+.glow-acid {
+  text-shadow: 0 0 10px rgba(232, 255, 60, 0.8), 0 0 26px rgba(232, 255, 60, 0.4);
+}
+
+.glow-box-magenta {
+  box-shadow: 0 0 18px rgba(255, 46, 146, 0.55), 0 0 40px rgba(255, 46, 146, 0.2), inset 0 0 0 1px rgba(255, 46, 146, 0.5);
+}
+
+.glow-box-violet {
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.5), inset 0 0 0 1px rgba(139, 92, 246, 0.45);
+}
+
+/* Geroteerde "stamp" badges, zoals stempels op een rave-flyer */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid currentColor;
+  padding: 0.25rem 0.75rem;
+  letter-spacing: 0.15em;
+  transform: rotate(-4deg);
+  white-space: nowrap;
+}
+
+.stamp-rotate-r {
+  transform: rotate(3deg);
+}
+
+/* Ticket-stub perforatie randen voor de camping-kaarten */
+.ticket-stub {
+  position: relative;
+  background-color: #16161d;
+  border: 1px dashed rgba(241, 239, 231, 0.25);
+}
+
+.ticket-stub::before,
+.ticket-stub::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #0b0b10;
+  border-radius: 9999px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-stub::before {
+  left: -11px;
+}
+
+.ticket-stub::after {
+  right: -11px;
+}
+
+/* Gaffer-tape divider tussen secties */
+.tape-divider {
+  height: 10px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #e8ff3c,
+    #e8ff3c 14px,
+    #16161d 14px,
+    #16161d 28px
+  );
+  opacity: 0.85;
+}
+
+.section-heading {
+  font-family: var(--font-anton), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Focus states duidelijk zichtbaar houden voor toegankelijkheid */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #e8ff3c;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
