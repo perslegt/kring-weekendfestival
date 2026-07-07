@@ -35,7 +35,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative px-5 py-24">
+    <section id="faq" className="relative z-10 px-5 py-24">
       <div className="mx-auto max-w-3xl">
         <span className="font-mono text-xs uppercase tracking-[0.3em] text-acid">
           Vragen
@@ -53,7 +53,7 @@ export default function FAQ() {
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-4 py-5 text-left"
+                  className="relative z-10 flex w-full items-center justify-between gap-4 py-5 text-left"
                 >
                   <span className="font-display text-lg tracking-wide text-bone sm:text-xl">
                     {faq.question}

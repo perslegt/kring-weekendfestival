@@ -47,7 +47,7 @@ export default function Hero() {
           </span>
         </div>
 
-        <div className="max-w-2xl">
+        <div className="hero-copy max-w-2xl">
           <p className="font-display text-4xl leading-none text-bone drop-shadow-[4px_5px_0_rgba(6,45,71,0.75)] sm:text-5xl">
             Coming Summer 2027
           </p>
