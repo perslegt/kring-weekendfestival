@@ -20,6 +20,9 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# local presale database
+/data/presale-submissions.json
+
 # vercel
 .vercel
 

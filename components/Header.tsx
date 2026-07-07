@@ -5,10 +5,10 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const links = [
-  { href: "#presale", label: "Presale" },
-  { href: "#camping", label: "Camping" },
-  { href: "#vibe", label: "Het Weekend" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#presale", label: "Presale" },
+  { href: "/#camping", label: "Camping" },
+  { href: "/#vibe", label: "Het Weekend" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 export default function Header() {
@@ -17,7 +17,7 @@ export default function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-bone/10 bg-void/85 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-        <a href="#top" className="relative block h-8 w-36 sm:h-9 sm:w-40">
+        <a href="/#top" className="relative block h-8 w-36 sm:h-9 sm:w-40">
           <Image
             src="/het-kring-header-logo.png"
             alt="Het Kring"
@@ -39,7 +39,7 @@ export default function Header() {
             </a>
           ))}
           <a
-            href="#presale"
+            href="/#presale"
             className="border border-magenta px-4 py-2 text-magenta transition-colors hover:bg-magenta hover:text-void"
           >
             Presale
@@ -70,7 +70,7 @@ export default function Header() {
             </a>
           ))}
           <a
-            href="#presale"
+            href="/#presale"
             onClick={() => setOpen(false)}
             className="mt-2 border border-magenta px-4 py-2 text-center text-magenta"
           >

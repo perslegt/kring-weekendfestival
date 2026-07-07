@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Ticket, ShieldCheck, Send } from "lucide-react";
 import QRPlaceholder from "./QRPlaceholder";
 
@@ -23,13 +24,28 @@ const steps = [
 ];
 
 export default function Presale() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
-    setSubmitted(true);
+    setError("");
+
+    const response = await fetch("/api/presale", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      setError("Aanmelden lukte niet. Probeer het opnieuw.");
+      return;
+    }
+
+    const data = await response.json();
+    router.push(`/aanmelden/ticket?signup=${data.submission.id}`);
   }
 
   return (
@@ -96,12 +112,12 @@ export default function Presale() {
                 Meld je aan
               </button>
             </form>
-            {submitted && (
+            {error && (
               <p
-                role="status"
+                role="alert"
                 className="font-mono text-xs uppercase tracking-[0.2em] text-acid"
               >
-                Je staat op de lijst. Check je mail zodra de presale opent.
+                {error}
               </p>
             )}
 
