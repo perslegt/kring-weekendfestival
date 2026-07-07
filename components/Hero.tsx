@@ -40,7 +40,7 @@ export default function Hero() {
 
         <div className="flex flex-wrap items-center gap-3">
           <span className="stamp font-mono text-xs font-bold text-acid">
-            WEEKEND 01 / ZOMER 2027
+            29 APRIL T/M 3 MEI 2027
           </span>
           <span className="stamp stamp-rotate-r font-mono text-xs font-bold text-bone">
             PRESALE BINNENKORT OPEN
