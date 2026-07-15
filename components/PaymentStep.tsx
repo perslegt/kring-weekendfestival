@@ -12,22 +12,22 @@ const ticketConfig: Record<
   weekend: {
     label: "WEEKEND TICKET",
     price: 160,
-    qrSrc: "/tikkie-qr-160.jfif",
+    qrSrc: "/weekend-tikkie.jpg",
   },
   friday: {
     label: "VRIJDAG TICKET",
     price: 85,
-    qrSrc: "/tikkie-qr-85.jfif",
+    qrSrc: "/dag-tikkie.jpg",
   },
   saturday: {
     label: "ZATERDAG TICKET",
     price: 85,
-    qrSrc: "/tikkie-qr-85.jfif",
+    qrSrc: "/dag-tikkie.jpg",
   },
   sunday: {
     label: "ZONDAG TICKET",
     price: 85,
-    qrSrc: "/tikkie-qr-85.jfif",
+    qrSrc: "/dag-tikkie.jpg",
   },
 };
 
@@ -126,7 +126,7 @@ export default function PaymentStep() {
         </div>
 
         <div className="glow-box-violet flex flex-col items-center justify-center gap-6 border border-violet/40 bg-ink px-6 py-10">
-          <span className="stamp font-mono text-xs text-violet">
+          <span className="stamp font-mono text-xs text-bone">
             {ticketLabel}
           </span>
           {selectedTicket ? (

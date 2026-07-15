@@ -2,7 +2,7 @@ import { Instagram, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-bone/10 px-5 py-16">
+    <footer className="relative border-t border-bone/10 bg-[#031c2d] px-5 py-16">
       <div className="mx-auto flex max-w-6xl flex-col gap-10">
         <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
           <div>

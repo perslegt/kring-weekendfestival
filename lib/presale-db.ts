@@ -11,6 +11,7 @@ export type PresaleSubmission = {
   wantsSleepover?: boolean;
   campingType?: CampingType;
   extraAnswers?: {
+    name?: string;
     crewName?: string;
     note?: string;
     nonRefundableAccepted?: boolean;

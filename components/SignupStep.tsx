@@ -281,20 +281,18 @@ export function CampingStep() {
 export function QuestionsStep() {
   const router = useRouter();
   const signupId = useSignupId();
-  const [crewName, setCrewName] = useState("");
-  const [note, setNote] = useState("");
+  const [name, setName] = useState("");
   const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!signupId || !accepted) return;
+    if (!signupId || !name.trim() || !accepted) return;
 
     try {
       await saveStep(signupId, {
         extraAnswers: {
-          crewName,
-          note,
+          name: name.trim(),
           nonRefundableAccepted: accepted,
         },
       });
@@ -307,6 +305,20 @@ export function QuestionsStep() {
   return (
     <StepShell eyebrow="Laatste stap" title="Nog één laatste vraag">
       <form onSubmit={handleSubmit} className="flex max-w-3xl flex-col gap-5">
+        <label className="flex flex-col gap-2 font-body text-bone">
+          <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-acid">
+            Naam
+          </span>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoComplete="name"
+            placeholder="Vul je naam in"
+            className="border border-bone/35 bg-void/65 px-5 py-4 text-base text-bone outline-none placeholder:text-bone/40 focus:border-acid"
+            required
+          />
+        </label>
         <label className="ticket-stub flex cursor-pointer gap-4 p-5 font-body text-bone">
           <input
             type="checkbox"

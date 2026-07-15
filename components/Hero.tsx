@@ -27,13 +27,13 @@ export default function Hero() {
       <div className="hero-layout relative z-20 mx-auto flex w-full max-w-6xl shrink-0 flex-col items-start gap-6">
         <h1 className="sr-only">Het Kring Weekendfestival</h1>
 
-        <div className="hero-logo relative h-[180px] w-full max-w-[760px] shrink-0 sm:h-[250px] lg:h-[310px]">
+        <div className="hero-logo relative h-[270px] w-full max-w-[1140px] shrink-0 sm:h-[375px] lg:h-[465px]">
           <Image
-            src="/kring-weekendfestival-logo.png"
+            src="/het-kring-festival-logo-v2.png"
             alt="Het Kring Weekendfestival"
             fill
             priority
-            sizes="(min-width: 1024px) 760px, 92vw"
+            sizes="(min-width: 1024px) 1140px, 92vw"
             className="object-contain object-left drop-shadow-[0_18px_28px_rgba(6,45,71,0.45)]"
           />
         </div>

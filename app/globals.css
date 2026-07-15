@@ -64,6 +64,17 @@ body {
   clip-path: polygon(0 7%, 95% 0, 100% 78%, 4% 100%);
 }
 
+@media (max-width: 639px) {
+  .hero-copy {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .hero-copy::before {
+    left: 0;
+  }
+}
+
 /* Keep the complete hero visible on short landscape screens. */
 @media (max-height: 700px) and (min-width: 640px) {
   .hero-section {
