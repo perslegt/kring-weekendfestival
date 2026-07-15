@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import {
   getAllSubmissions,
   type PresaleSubmission,
@@ -71,26 +69,8 @@ function sortSubmissions(
   });
 }
 
-async function getJsonSubmissions() {
-  try {
-    const contents = await readFile(
-      path.join(process.cwd(), "data", "presale-submissions.json"),
-      "utf8",
-    );
-    const parsed = JSON.parse(contents) as { submissions?: PresaleSubmission[] };
-    return Array.isArray(parsed.submissions) ? parsed.submissions : [];
-  } catch {
-    return [];
-  }
-}
-
 async function loadSubmissions() {
-  try {
-    return { submissions: await getAllSubmissions(), source: "Supabase" };
-  } catch (error) {
-    console.error("Adminoverzicht gebruikt JSON-fallback:", error);
-    return { submissions: await getJsonSubmissions(), source: "JSON-back-up" };
-  }
+  return { submissions: await getAllSubmissions(), source: "JSON" };
 }
 
 function date(value?: string) {

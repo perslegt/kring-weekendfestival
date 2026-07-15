@@ -1,4 +1,5 @@
-import { getSupabaseAdmin } from "@/lib/supabase-admin";
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
 
 export const ticketTypes = ["weekend", "friday", "saturday", "sunday"] as const;
 export const campingTypes = ["regular", "silent", "couples", "24-hours"] as const;
@@ -30,18 +31,10 @@ export type SubmissionPatch = Partial<
   Omit<PresaleSubmission, "id" | "email" | "createdAt" | "updatedAt">
 >;
 
-type SubmissionRow = {
-  id: string;
-  email: string;
-  ticket_type: TicketType | null;
-  wants_sleepover: boolean | null;
-  camping_type: CampingType | null;
-  payment_confirmed_at: string | null;
-  confirmed: boolean;
-  extra_answers: ExtraAnswers | null;
-  created_at: string;
-  updated_at: string;
-};
+type PresaleData = { submissions: PresaleSubmission[] };
+
+const dataPath = path.join(process.cwd(), "data", "presale-submissions.json");
+let writeQueue: Promise<void> = Promise.resolve();
 
 export class PresaleDatabaseError extends Error {
   constructor(message: string, readonly cause?: unknown) {
@@ -50,111 +43,83 @@ export class PresaleDatabaseError extends Error {
   }
 }
 
-function mapSubmission(row: SubmissionRow): PresaleSubmission {
-  return {
-    id: row.id,
-    email: row.email,
-    ...(row.ticket_type ? { ticketType: row.ticket_type } : {}),
-    ...(row.wants_sleepover !== null ? { wantsSleepover: row.wants_sleepover } : {}),
-    ...(row.camping_type ? { campingType: row.camping_type } : {}),
-    ...(row.payment_confirmed_at
-      ? { paymentConfirmedAt: row.payment_confirmed_at }
-      : {}),
-    confirmed: row.confirmed ?? false,
-    ...(row.extra_answers ? { extraAnswers: row.extra_answers } : {}),
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
-  };
+async function readData(): Promise<PresaleData> {
+  try {
+    const parsed = JSON.parse(await readFile(dataPath, "utf8")) as PresaleData;
+    const submissions = Array.isArray(parsed.submissions) ? parsed.submissions : [];
+    return {
+      submissions: submissions.map((submission) => ({
+        ...submission,
+        confirmed: submission.confirmed ?? false,
+      })),
+    };
+  } catch (error) {
+    throw new PresaleDatabaseError("Registraties uit JSON lezen is mislukt.", error);
+  }
+}
+
+async function writeData(data: PresaleData) {
+  await writeFile(dataPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+}
+
+function updateData<T>(change: (data: PresaleData) => Promise<T> | T): Promise<T> {
+  const operation = writeQueue.then(async () => {
+    const data = await readData();
+    const result = await change(data);
+    await writeData(data);
+    return result;
+  });
+  writeQueue = operation.then(() => undefined, () => undefined);
+  return operation;
 }
 
 export async function createSubmission(email: string) {
-  const id = crypto.randomUUID();
-  const { data, error } = await getSupabaseAdmin()
-    .from("presale_submissions")
-    .insert({ id, email })
-    .select("*")
-    .single<SubmissionRow>();
-
-  if (error || !data) {
-    throw new PresaleDatabaseError("Aanmelding aanmaken is mislukt.", error);
-  }
-
-  return mapSubmission(data);
+  return updateData((data) => {
+    const now = new Date().toISOString();
+    const submission: PresaleSubmission = {
+      id: crypto.randomUUID(),
+      email,
+      confirmed: false,
+      createdAt: now,
+      updatedAt: now,
+    };
+    data.submissions.push(submission);
+    return submission;
+  });
 }
 
 export async function getSubmission(id: string) {
-  const { data, error } = await getSupabaseAdmin()
-    .from("presale_submissions")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle<SubmissionRow>();
-
-  if (error) {
-    throw new PresaleDatabaseError("Aanmelding ophalen is mislukt.", error);
-  }
-
-  return data ? mapSubmission(data) : null;
+  const data = await readData();
+  return data.submissions.find((submission) => submission.id === id) ?? null;
 }
 
 export async function getAllSubmissions() {
-  const { data, error } = await getSupabaseAdmin()
-    .from("presale_submissions")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .returns<SubmissionRow[]>();
-
-  if (error) {
-    throw new PresaleDatabaseError("Aanmeldingen ophalen is mislukt.", error);
-  }
-
-  return (data ?? []).map(mapSubmission);
+  const data = await readData();
+  return data.submissions.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
 export async function setSubmissionConfirmed(id: string, confirmed: boolean) {
-  const { error } = await getSupabaseAdmin()
-    .from("presale_submissions")
-    .update({ confirmed })
-    .eq("id", id);
-
-  if (error) {
-    throw new PresaleDatabaseError("Bevestiging opslaan is mislukt.", error);
-  }
+  return updateData((data) => {
+    const submission = data.submissions.find((item) => item.id === id);
+    if (!submission) throw new PresaleDatabaseError("Registratie niet gevonden.");
+    submission.confirmed = confirmed;
+    submission.updatedAt = new Date().toISOString();
+  });
 }
 
 export async function deleteSubmission(id: string) {
-  const { error } = await getSupabaseAdmin()
-    .from("presale_submissions")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    throw new PresaleDatabaseError("Aanmelding verwijderen is mislukt.", error);
-  }
+  return updateData((data) => {
+    const index = data.submissions.findIndex((item) => item.id === id);
+    if (index === -1) throw new PresaleDatabaseError("Registratie niet gevonden.");
+    data.submissions.splice(index, 1);
+  });
 }
 
 export async function updateSubmission(id: string, patch: SubmissionPatch) {
-  const databasePatch: Record<string, unknown> = {};
-
-  if (patch.ticketType !== undefined) databasePatch.ticket_type = patch.ticketType;
-  if (patch.wantsSleepover !== undefined) {
-    databasePatch.wants_sleepover = patch.wantsSleepover;
-  }
-  if (patch.campingType !== undefined) databasePatch.camping_type = patch.campingType;
-  if (patch.paymentConfirmedAt !== undefined) {
-    databasePatch.payment_confirmed_at = patch.paymentConfirmedAt;
-  }
-  if (patch.extraAnswers !== undefined) databasePatch.extra_answers = patch.extraAnswers;
-
-  const { data, error } = await getSupabaseAdmin()
-    .from("presale_submissions")
-    .update(databasePatch)
-    .eq("id", id)
-    .select("*")
-    .maybeSingle<SubmissionRow>();
-
-  if (error) {
-    throw new PresaleDatabaseError("Aanmelding bijwerken is mislukt.", error);
-  }
-
-  return data ? mapSubmission(data) : null;
+  return updateData((data) => {
+    const submission = data.submissions.find((item) => item.id === id);
+    if (!submission) return null;
+    Object.assign(submission, patch, { updatedAt: new Date().toISOString() });
+    return submission;
+  });
 }
