@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import { QuestionsStep } from "@/components/SignupStep";
 
 export default function QuestionsPage() {
-  return <QuestionsStep />;
+  return (
+    <Suspense fallback={null}>
+      <QuestionsStep />
+    </Suspense>
+  );
 }

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Header from "@/components/Header";
 
 export default function SignupLayout({
@@ -8,7 +9,17 @@ export default function SignupLayout({
   return (
     <>
       <Header />
-      {children}
+      <Suspense
+        fallback={
+          <main className="site-background flex min-h-screen items-center justify-center px-5">
+            <p className="font-mono text-xs uppercase tracking-[0.25em] text-acid">
+              Aanmelding laden...
+            </p>
+          </main>
+        }
+      >
+        {children}
+      </Suspense>
     </>
   );
 }
