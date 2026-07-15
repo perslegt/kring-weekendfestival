@@ -1,8 +1,17 @@
-import { mkdir, readFile, writeFile } from "fs/promises";
-import path from "path";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
-export type TicketType = "weekend" | "friday" | "saturday" | "sunday";
-export type CampingType = "regular" | "silent" | "couples" | "24-hours";
+export const ticketTypes = ["weekend", "friday", "saturday", "sunday"] as const;
+export const campingTypes = ["regular", "silent", "couples", "24-hours"] as const;
+
+export type TicketType = (typeof ticketTypes)[number];
+export type CampingType = (typeof campingTypes)[number];
+
+export type ExtraAnswers = {
+  name?: string;
+  crewName?: string;
+  note?: string;
+  nonRefundableAccepted?: boolean;
+};
 
 export type PresaleSubmission = {
   id: string;
@@ -10,78 +19,103 @@ export type PresaleSubmission = {
   ticketType?: TicketType;
   wantsSleepover?: boolean;
   campingType?: CampingType;
-  extraAnswers?: {
-    name?: string;
-    crewName?: string;
-    note?: string;
-    nonRefundableAccepted?: boolean;
-  };
+  paymentConfirmedAt?: string;
+  extraAnswers?: ExtraAnswers;
   createdAt: string;
   updatedAt: string;
 };
 
-type PresaleDatabase = {
-  submissions: PresaleSubmission[];
+export type SubmissionPatch = Partial<
+  Omit<PresaleSubmission, "id" | "email" | "createdAt" | "updatedAt">
+>;
+
+type SubmissionRow = {
+  id: string;
+  email: string;
+  ticket_type: TicketType | null;
+  wants_sleepover: boolean | null;
+  camping_type: CampingType | null;
+  payment_confirmed_at: string | null;
+  extra_answers: ExtraAnswers | null;
+  created_at: string;
+  updated_at: string;
 };
 
-const databaseDir = path.join(process.cwd(), "data");
-const databasePath = path.join(databaseDir, "presale-submissions.json");
-
-async function readDatabase(): Promise<PresaleDatabase> {
-  try {
-    const raw = await readFile(databasePath, "utf8");
-    return JSON.parse(raw) as PresaleDatabase;
-  } catch {
-    return { submissions: [] };
+export class PresaleDatabaseError extends Error {
+  constructor(message: string, readonly cause?: unknown) {
+    super(message);
+    this.name = "PresaleDatabaseError";
   }
 }
 
-async function writeDatabase(database: PresaleDatabase) {
-  await mkdir(databaseDir, { recursive: true });
-  await writeFile(databasePath, JSON.stringify(database, null, 2), "utf8");
+function mapSubmission(row: SubmissionRow): PresaleSubmission {
+  return {
+    id: row.id,
+    email: row.email,
+    ...(row.ticket_type ? { ticketType: row.ticket_type } : {}),
+    ...(row.wants_sleepover !== null ? { wantsSleepover: row.wants_sleepover } : {}),
+    ...(row.camping_type ? { campingType: row.camping_type } : {}),
+    ...(row.payment_confirmed_at
+      ? { paymentConfirmedAt: row.payment_confirmed_at }
+      : {}),
+    ...(row.extra_answers ? { extraAnswers: row.extra_answers } : {}),
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
 }
 
 export async function createSubmission(email: string) {
-  const database = await readDatabase();
-  const now = new Date().toISOString();
-  const submission: PresaleSubmission = {
-    id: crypto.randomUUID(),
-    email,
-    createdAt: now,
-    updatedAt: now,
-  };
+  const id = crypto.randomUUID();
+  const { data, error } = await getSupabaseAdmin()
+    .from("presale_submissions")
+    .insert({ id, email })
+    .select("*")
+    .single<SubmissionRow>();
 
-  database.submissions.push(submission);
-  await writeDatabase(database);
-  return submission;
+  if (error || !data) {
+    throw new PresaleDatabaseError("Aanmelding aanmaken is mislukt.", error);
+  }
+
+  return mapSubmission(data);
 }
 
 export async function getSubmission(id: string) {
-  const database = await readDatabase();
-  return database.submissions.find((submission) => submission.id === id) ?? null;
-}
+  const { data, error } = await getSupabaseAdmin()
+    .from("presale_submissions")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle<SubmissionRow>();
 
-export async function updateSubmission(
-  id: string,
-  patch: Partial<Omit<PresaleSubmission, "id" | "createdAt" | "updatedAt">>,
-) {
-  const database = await readDatabase();
-  const index = database.submissions.findIndex((submission) => submission.id === id);
-
-  if (index === -1) {
-    return null;
+  if (error) {
+    throw new PresaleDatabaseError("Aanmelding ophalen is mislukt.", error);
   }
 
-  database.submissions[index] = {
-    ...database.submissions[index],
-    ...patch,
-    extraAnswers: {
-      ...database.submissions[index].extraAnswers,
-      ...patch.extraAnswers,
-    },
-    updatedAt: new Date().toISOString(),
-  };
+  return data ? mapSubmission(data) : null;
+}
 
-  await writeDatabase(database);
-  return database.submissions[index];
+export async function updateSubmission(id: string, patch: SubmissionPatch) {
+  const databasePatch: Record<string, unknown> = {};
+
+  if (patch.ticketType !== undefined) databasePatch.ticket_type = patch.ticketType;
+  if (patch.wantsSleepover !== undefined) {
+    databasePatch.wants_sleepover = patch.wantsSleepover;
+  }
+  if (patch.campingType !== undefined) databasePatch.camping_type = patch.campingType;
+  if (patch.paymentConfirmedAt !== undefined) {
+    databasePatch.payment_confirmed_at = patch.paymentConfirmedAt;
+  }
+  if (patch.extraAnswers !== undefined) databasePatch.extra_answers = patch.extraAnswers;
+
+  const { data, error } = await getSupabaseAdmin()
+    .from("presale_submissions")
+    .update(databasePatch)
+    .eq("id", id)
+    .select("*")
+    .maybeSingle<SubmissionRow>();
+
+  if (error) {
+    throw new PresaleDatabaseError("Aanmelding bijwerken is mislukt.", error);
+  }
+
+  return data ? mapSubmission(data) : null;
 }

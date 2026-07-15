@@ -19,8 +19,9 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
-# local presale database
+# legacy local presale backup (remove after the Supabase smoke test)
 /data/presale-submissions.json
 
 # vercel
