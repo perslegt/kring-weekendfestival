@@ -20,6 +20,7 @@ export type PresaleSubmission = {
   wantsSleepover?: boolean;
   campingType?: CampingType;
   paymentConfirmedAt?: string;
+  confirmed: boolean;
   extraAnswers?: ExtraAnswers;
   createdAt: string;
   updatedAt: string;
@@ -36,6 +37,7 @@ type SubmissionRow = {
   wants_sleepover: boolean | null;
   camping_type: CampingType | null;
   payment_confirmed_at: string | null;
+  confirmed: boolean;
   extra_answers: ExtraAnswers | null;
   created_at: string;
   updated_at: string;
@@ -58,6 +60,7 @@ function mapSubmission(row: SubmissionRow): PresaleSubmission {
     ...(row.payment_confirmed_at
       ? { paymentConfirmedAt: row.payment_confirmed_at }
       : {}),
+    confirmed: row.confirmed ?? false,
     ...(row.extra_answers ? { extraAnswers: row.extra_answers } : {}),
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -91,6 +94,42 @@ export async function getSubmission(id: string) {
   }
 
   return data ? mapSubmission(data) : null;
+}
+
+export async function getAllSubmissions() {
+  const { data, error } = await getSupabaseAdmin()
+    .from("presale_submissions")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .returns<SubmissionRow[]>();
+
+  if (error) {
+    throw new PresaleDatabaseError("Aanmeldingen ophalen is mislukt.", error);
+  }
+
+  return (data ?? []).map(mapSubmission);
+}
+
+export async function setSubmissionConfirmed(id: string, confirmed: boolean) {
+  const { error } = await getSupabaseAdmin()
+    .from("presale_submissions")
+    .update({ confirmed })
+    .eq("id", id);
+
+  if (error) {
+    throw new PresaleDatabaseError("Bevestiging opslaan is mislukt.", error);
+  }
+}
+
+export async function deleteSubmission(id: string) {
+  const { error } = await getSupabaseAdmin()
+    .from("presale_submissions")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    throw new PresaleDatabaseError("Aanmelding verwijderen is mislukt.", error);
+  }
 }
 
 export async function updateSubmission(id: string, patch: SubmissionPatch) {
