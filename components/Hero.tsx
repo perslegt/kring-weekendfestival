@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate flex min-h-[92svh] flex-col justify-end overflow-hidden bg-void px-5 pb-10 pt-28 sm:pb-14 sm:pt-32"
+      className="hero-section relative isolate flex min-h-[92svh] flex-col justify-end overflow-hidden bg-void px-5 pb-10 pt-28 sm:pb-14 sm:pt-32"
     >
       <Image
         src="/kring-weekendfestival-background.png"
@@ -24,10 +24,10 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-20 mx-auto flex w-full max-w-6xl flex-col items-start gap-6">
+      <div className="hero-layout relative z-20 mx-auto flex w-full max-w-6xl shrink-0 flex-col items-start gap-6">
         <h1 className="sr-only">Het Kring Weekendfestival</h1>
 
-        <div className="relative h-[180px] w-full max-w-[760px] sm:h-[250px] lg:h-[310px]">
+        <div className="hero-logo relative h-[180px] w-full max-w-[760px] shrink-0 sm:h-[250px] lg:h-[310px]">
           <Image
             src="/kring-weekendfestival-logo.png"
             alt="Het Kring Weekendfestival"
@@ -43,18 +43,16 @@ export default function Hero() {
             29 APRIL T/M 3 MEI 2027
           </span>
           <span className="stamp stamp-rotate-r font-mono text-xs font-bold text-bone">
-            PRESALE BINNENKORT OPEN
+            PRESALE GEOPEND
           </span>
         </div>
 
-        <div className="hero-copy max-w-2xl">
-          <p className="font-display text-4xl leading-none text-bone drop-shadow-[4px_5px_0_rgba(6,45,71,0.75)] sm:text-5xl">
-            Coming Summer 2027
+        <div className="hero-copy w-full max-w-5xl">
+          <p className="hero-title font-display text-[clamp(2.125rem,5.5vw,4.25rem)] leading-[0.98] text-bone drop-shadow-[4px_5px_0_rgba(6,45,71,0.75)]">
+            Vier dagen. Eén villa. Eén Kring.
           </p>
-          <p className="mt-4 max-w-xl font-body text-base font-semibold leading-relaxed text-bone sm:text-lg">
-            Drie dagen hardcore, uptempo en keiharde kicks op een terrein dat
-            helemaal van ons is. Jouw crew, harde muziek en een zomerweekend
-            dat je niet snel vergeet.
+          <p className="hero-intro mt-4 max-w-4xl font-body text-base font-semibold leading-relaxed text-bone sm:text-lg">
+            Welkom bij Het Kring Weekendfestival 2027! Vier dagen lang verruilen we het normale leven voor ons eigen festivalterrein, compleet met muziek, feest, activiteiten, verblijf en natuurlijk de beste mensen om je heen.
           </p>
         </div>
 
@@ -64,14 +62,14 @@ export default function Hero() {
             className="glow-box-magenta inline-flex items-center justify-center gap-3 border-2 border-violet bg-magenta px-7 py-4 font-mono text-sm font-bold uppercase tracking-[0.15em] text-bone transition-colors hover:bg-acid hover:text-violet"
           >
             <Ticket className="h-5 w-5" aria-hidden="true" />
-            Meld je aan voor de presale
+            Meld je aan voor de reguliere verkoop
           </a>
           <a
             href="#vibe"
             className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.2em] text-bone transition-colors hover:text-acid"
           >
             <ArrowDown className="h-4 w-4" />
-            Bekijk de vibe
+            Bekijk de line-up
           </a>
         </div>
       </div>

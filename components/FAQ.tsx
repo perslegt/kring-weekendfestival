@@ -20,14 +20,14 @@ const faqs = [
       "De volledige line-up volgt later. Presale-aanmelders horen dit als eerste, via e-mail.",
   },
   {
-    question: "Welke camping opties zijn er?",
+    question: "Wat verstaan wij onder camping?",
     answer:
-      "Je kunt kiezen uit Regular Camping, Silent Camping, Couples Camping en 24 Hours Camping. Elke optie heeft een eigen sfeer, van rustig tot non-stop.",
+      "De camping is de indeling voor de slaapzalen, je kan je tent en slaapspullen dus thuis laten.",
   },
   {
-    question: "Is dit geschikt voor een groep vrienden?",
+    question: "Is dit vervanging voor het kring weekend?",
     answer:
-      "Zeker. Het Kring Weekendfestival is opgezet als een vriendenweekend: kies samen een camping, boek samen je plek en breng het hele weekend door met je crew.",
+      "Dit is het kring weekend! Maar dan in een ander jasje.",
   },
 ];
 

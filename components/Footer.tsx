@@ -22,7 +22,7 @@ export default function Footer() {
               <Mail className="h-4 w-4" /> Presale
             </a>
             <a
-              href="https://instagram.com"
+              href="https://instagram.com/hetkring"
               target="_blank"
               rel="noreferrer noopener"
               className="flex items-center gap-2 transition-colors hover:text-acid"
@@ -40,7 +40,7 @@ export default function Footer() {
             als aanbetaling voor het festivalterrein/accommodatie. Prijzen,
             data en line-up onder voorbehoud.
           </p>
-          <p>© 2027 Het Kring Weekendfestival. Alle rechten voorbehouden.</p>
+          <p>© 2027 Het Kring. Alle rechten voorbehouden.</p>
         </div>
       </div>
     </footer>

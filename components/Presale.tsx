@@ -2,24 +2,33 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Ticket, ShieldCheck, Send } from "lucide-react";
-import QRPlaceholder from "./QRPlaceholder";
+import { CreditCard, ShieldCheck, Send, TentTree, Ticket } from "lucide-react";
 
 const steps = [
   {
     icon: Send,
-    title: "Meld je aan",
-    text: "Laat je e-mailadres achter of scan de QR-code zodra de presale live gaat.",
+    title: "Aanmelding",
+    text: "Vul je e-mailadres in en start je aanmelding.",
   },
   {
     icon: Ticket,
-    title: "Betaal de aanbetaling",
-    text: "Je betaalt een kleine aanbetaling om je plek vast te leggen op het terrein.",
+    title: "Ticket kiezen",
+    text: "Kies het ticket dat bij jouw weekendfestival past.",
+  },
+  {
+    icon: TentTree,
+    title: "Camping kiezen",
+    text: "Kies je slaapplaats.",
+  },
+  {
+    icon: CreditCard,
+    title: "Betalen",
+    text: "Rond de aanbetaling voor je ticket af.",
   },
   {
     icon: ShieldCheck,
-    title: "Je plek is zeker",
-    text: "Je ticket voor het volledige weekendfestival ligt vast — geen sold-out stress achteraf.",
+    title: "Plek is zeker",
+    text: "Je plek voor het weekendfestival ligt vast.",
   },
 ];
 
@@ -56,22 +65,18 @@ export default function Presale() {
             Presale
           </span>
           <h2 className="section-heading glow-magenta text-4xl text-bone sm:text-5xl">
-            Zeker van je plek.
-            <br />
-            Geen twijfel.
+            Claim je plek!
           </h2>
           <p className="mt-4 max-w-2xl font-body text-bone/70">
-            Meld je aan voor de presale en je bent verzekerd van een ticket
-            voor het volledige Kring Weekendfestival. Geen wachtrij, geen
-            gok of het lukt — jouw weekend staat vast voordat de reguliere
+            Meld je aan voor de reguliere verkoop en je bent verzekerd van een ticket
+            voor het Kring Weekendfestival. Jouw weekend staat vast voordat de reguliere
             verkoop überhaupt begint.
           </p>
         </div>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-[1.3fr_1fr]">
-          {/* Stappen + formulier */}
+        <div className="mt-14">
           <div className="flex flex-col gap-8">
-            <ol className="grid gap-6 sm:grid-cols-3">
+            <ol className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
               {steps.map((step, i) => (
                 <li
                   key={step.title}
@@ -122,18 +127,11 @@ export default function Presale() {
             )}
 
             <p className="max-w-xl font-mono text-[11px] leading-relaxed text-concrete">
-              De presale-aanbetaling is niet restitueerbaar, omdat dit dient
+              De aanbetaling is niet restitueerbaar, omdat dit dient
               als aanbetaling voor het festivalterrein/accommodatie.
             </p>
           </div>
 
-          {/* QR blok */}
-          <div className="glow-box-violet flex flex-col items-center justify-center gap-6 border border-violet/40 bg-ink px-6 py-10">
-            <span className="stamp font-mono text-xs text-violet">
-              LIMITED PRESALE
-            </span>
-            <QRPlaceholder />
-          </div>
         </div>
       </div>
     </section>

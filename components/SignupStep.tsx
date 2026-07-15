@@ -9,28 +9,27 @@ type Option = {
   value: string;
   title: string;
   text: string;
+  price?: number;
 };
 
 const ticketOptions: Option[] = [
   {
     value: "weekend",
     title: "Weekend ticket",
-    text: "Vrijdag tot en met zondag, inclusief toegang tot de volledige weekendervaring.",
+    text: "Donderdag t/m maandag.",
+    price: 160,
   },
   {
     value: "friday",
     title: "Vrijdag ticket",
-    text: "Een losse dag voor de vrijdag.",
+    text: "Vrijdag middag aankomst t/m Zaterdag 13:00",
+    price: 85,
   },
   {
     value: "saturday",
     title: "Zaterdag ticket",
-    text: "Een losse dag voor de zaterdag.",
-  },
-  {
-    value: "sunday",
-    title: "Zondag ticket",
-    text: "Een losse dag voor de zondag.",
+    text: "Zaterdag middag aankomst t/m Zondag 13:00",
+    price: 85,
   },
 ];
 
@@ -38,22 +37,22 @@ const campingOptions: Option[] = [
   {
     value: "regular",
     title: "Regular Camping",
-    text: "Dicht bij het terrein, simpel en gezellig met je crew.",
+    text: "De perfecte middenweg tussen rust en gezelligheid. Een drankje, een spelletje of nog even napraten over de festivaldag? Dat kan hier. Wil je slapen dan lukt dat ook prima. Ideaal voor bezoekers die van de gezelligheid willen meegenieten, maar niet per se van plan zijn om helemaal naar de gedver te gaan.",
   },
   {
     value: "silent",
     title: "Silent Camping",
-    text: "Rustiger slapen na het feest.",
+    text: "De ideale camping voor bezoekers die na een lange festivaldag hun nachtrust serieus nemen. Hier geldt: geen harde muziek, geen afters en geen onverwachte ketagangers om 4 uur snachts. Perfect voor de mensen die op tijd hun bed induiken, de volgende ochtend fris willen opstaan en geen zin hebben in pratende of feestende campingburen.",
   },
   {
     value: "couples",
     title: "Couples Camping",
-    text: "Meer privacy voor jou en je plus-een.",
+    text: "Een exclusieve campingzone voor de tortelduifjes van het festival. Iets meer rust, iets meer privacy en wat meer ruimte voor quality time samen. De perfecte plek om even te ontspannen aan de festivaldrukte en samen van het weekend te genieten.",
   },
   {
     value: "24-hours",
     title: "24 Hours Camping",
-    text: "Voor wie zo dicht mogelijk bij de actie wil blijven.",
+    text: "Voor de echte diehards die vinden dat slapen tijdverspilling is. Hier kan een afterparty plaatsvinden voordat iedereen uiteindelijk richting bed gaat. Soms ontstaan er wat vage gesprekken en is het niet ongewoon om om 4 uur snachts nog iemand met een schepje in zijn hand voorbij te zien lopen. Alles wordt uit het weekend gehaald en met 3 a 4 uur slaap nemen de meesten genoegen.",
   },
 ];
 
@@ -140,6 +139,11 @@ export function TicketStep() {
                 <span className="block font-display text-2xl text-bone">
                   {option.title}
                 </span>
+                {option.price && (
+                  <span className="mt-1 block font-mono text-sm font-bold text-acid">
+                    €{option.price}
+                  </span>
+                )}
                 <span className="mt-2 block font-body text-sm leading-relaxed text-bone/65">
                   {option.text}
                 </span>
@@ -301,26 +305,8 @@ export function QuestionsStep() {
   }
 
   return (
-    <StepShell eyebrow="Laatste stap" title="Nog een paar vragen">
+    <StepShell eyebrow="Laatste stap" title="Nog één laatste vraag">
       <form onSubmit={handleSubmit} className="flex max-w-3xl flex-col gap-5">
-        <label className="flex flex-col gap-2 font-mono text-xs uppercase tracking-[0.18em] text-bone">
-          Crewnaam
-          <input
-            value={crewName}
-            onChange={(e) => setCrewName(e.target.value)}
-            className="border border-bone/20 bg-void px-4 py-3 font-body text-base normal-case tracking-normal text-bone focus:border-magenta focus:outline-none"
-            placeholder="Naam van je groep"
-          />
-        </label>
-        <label className="flex flex-col gap-2 font-mono text-xs uppercase tracking-[0.18em] text-bone">
-          Opmerking
-          <textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            className="min-h-32 border border-bone/20 bg-void px-4 py-3 font-body text-base normal-case tracking-normal text-bone focus:border-magenta focus:outline-none"
-            placeholder="Extra vraag volgt later, deze ruimte is alvast voorbereid."
-          />
-        </label>
         <label className="ticket-stub flex cursor-pointer gap-4 p-5 font-body text-bone">
           <input
             type="checkbox"

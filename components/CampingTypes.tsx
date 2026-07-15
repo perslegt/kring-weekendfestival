@@ -5,25 +5,25 @@ const campings = [
     icon: Tent,
     name: "Regular Camping",
     code: "CMP-REG",
-    text: "Voor de crew die het simpel houdt: dicht bij de podia, dicht bij elkaar, en verder gewoon goed geregeld.",
+    text: "De perfecte middenweg tussen rust en gezelligheid. Een drankje, een spelletje of nog even napraten over de festivaldag? Dat kan hier. Wil je slapen dan lukt dat ook prima. Ideaal voor bezoekers die van de gezelligheid willen meegenieten, maar niet per se van plan zijn om helemaal naar de gedver te gaan.",
   },
   {
     icon: EarOff,
     name: "Silent Camping",
     code: "CMP-SIL",
-    text: "Rust na het feest. Voor wie head clear wil blijven, toch het hele weekend erbij is en wil bijkomen zonder bassen in je tent.",
+    text: "De ideale camping voor bezoekers die na een lange festivaldag hun nachtrust serieus nemen. Hier geldt: geen harde muziek, geen afters en geen onverwachte ketagangers om 4 uur snachts. Perfect voor de mensen die op tijd hun bed induiken, de volgende ochtend fris willen opstaan en geen zin hebben in pratende of feestende campingburen.",
   },
   {
     icon: Heart,
     name: "Couples Camping",
     code: "CMP-DUO",
-    text: "Net wat meer privacy voor jou en je +1. Samen op het terrein, samen op het feest.",
+    text: "Een exclusieve campingzone voor de tortelduifjes van het festival. Iets meer rust, iets meer privacy en wat meer ruimte voor quality time samen. De perfecte plek om even te ontspannen aan de festivaldrukte en samen van het weekend te genieten.",
   },
   {
     icon: InfinityIcon,
     name: "24 Hours Camping",
     code: "CMP-24H",
-    text: "Non-stop, dicht bij de actie. Voor wie nooit stopt en het liefst zo min mogelijk loopt tussen tent en dansvloer.",
+    text: "Voor de echte diehards die vinden dat slapen tijdverspilling is. Hier kan een afterparty plaatsvinden voordat iedereen uiteindelijk richting bed gaat. Soms ontstaan er wat vage gesprekken en is het niet ongewoon om om 4 uur snachts nog iemand met een schepje in zijn hand voorbij te zien lopen. Alles wordt uit het weekend gehaald en met 3 a 4 uur slaap nemen de meesten genoegen.",
   },
 ];
 
@@ -38,8 +38,7 @@ export default function CampingTypes() {
           Kies je camping
         </h2>
         <p className="mt-4 max-w-2xl font-body text-bone/70">
-          Vier opties, één terrein. Kies wat bij je crew past — of split de
-          groep en zie elkaar toch de hele dag op de dansvloer.
+          Camping ticket is geldig voor 1 persoon.<br/> <i>Laat je tent thuis ;)</i>
         </p>
 
         <div className="mt-14 grid gap-x-6 gap-y-10 sm:grid-cols-2">

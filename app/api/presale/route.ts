@@ -38,12 +38,22 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Inschrijving ontbreekt." }, { status: 400 });
   }
 
-  const submission = await updateSubmission(id, {
-    ticketType: body.ticketType,
-    wantsSleepover: body.wantsSleepover,
-    campingType: body.campingType,
-    extraAnswers: body.extraAnswers,
-  });
+  const patch: Parameters<typeof updateSubmission>[1] = {};
+
+  if (Object.prototype.hasOwnProperty.call(body, "ticketType")) {
+    patch.ticketType = body.ticketType;
+  }
+  if (Object.prototype.hasOwnProperty.call(body, "wantsSleepover")) {
+    patch.wantsSleepover = body.wantsSleepover;
+  }
+  if (Object.prototype.hasOwnProperty.call(body, "campingType")) {
+    patch.campingType = body.campingType;
+  }
+  if (Object.prototype.hasOwnProperty.call(body, "extraAnswers")) {
+    patch.extraAnswers = body.extraAnswers;
+  }
+
+  const submission = await updateSubmission(id, patch);
 
   if (!submission) {
     return NextResponse.json({ error: "Inschrijving niet gevonden." }, { status: 404 });
