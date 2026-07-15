@@ -37,6 +37,8 @@ export default function PaymentStep() {
   const signupId = searchParams.get("signup");
   const [submission, setSubmission] = useState<PresaleSubmission | null>(null);
   const [loading, setLoading] = useState(true);
+  const [confirmingPayment, setConfirmingPayment] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
 
   useEffect(() => {
     if (!signupId) {
@@ -67,6 +69,30 @@ export default function PaymentStep() {
     ? ticketConfig[submission.ticketType]
     : null;
   const ticketLabel = selectedTicket?.label ?? "TICKET NIET GEVONDEN";
+
+  async function confirmPayment() {
+    if (!signupId || confirmingPayment || submission?.paymentConfirmedAt) return;
+
+    setConfirmingPayment(true);
+    setPaymentError("");
+
+    try {
+      const response = await fetch("/api/presale", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: signupId, paymentConfirmed: true }),
+      });
+
+      if (!response.ok) throw new Error("Bevestigen is mislukt.");
+
+      const data = await response.json();
+      setSubmission(data.submission as PresaleSubmission);
+    } catch {
+      setPaymentError("We konden je betaling niet bevestigen. Probeer het opnieuw.");
+    } finally {
+      setConfirmingPayment(false);
+    }
+  }
 
   if (loading || !selectedTicket) {
     return (
@@ -144,6 +170,23 @@ export default function PaymentStep() {
               <span className="font-display text-3xl text-bone">
                 €{selectedTicket.price}
               </span>
+              <button
+                type="button"
+                onClick={confirmPayment}
+                disabled={confirmingPayment || Boolean(submission?.paymentConfirmedAt)}
+                className="glow-box-magenta border-2 border-magenta bg-magenta px-7 py-3 font-mono text-sm font-bold uppercase tracking-[0.18em] text-void transition-colors hover:bg-acid disabled:cursor-default disabled:border-acid disabled:bg-acid"
+              >
+                {submission?.paymentConfirmedAt
+                  ? "Betaling bevestigd"
+                  : confirmingPayment
+                    ? "Bevestigen..."
+                    : "Betaald"}
+              </button>
+              {paymentError && (
+                <p className="text-center font-mono text-xs uppercase text-acid">
+                  {paymentError}
+                </p>
+              )}
             </>
           ) : (
             <p className="font-mono text-xs uppercase tracking-[0.18em] text-acid">
