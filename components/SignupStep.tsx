@@ -10,6 +10,7 @@ type Option = {
   title: string;
   text: string;
   price?: number;
+  totalPrice?: number;
 };
 
 const ticketOptions: Option[] = [
@@ -18,6 +19,7 @@ const ticketOptions: Option[] = [
     title: "Weekend ticket",
     text: "Donderdag t/m maandag.",
     price: 160,
+    totalPrice: 360,
   },
   {
     value: "friday",
@@ -142,7 +144,9 @@ export function TicketStep() {
                 </span>
                 {option.price && (
                   <span className="mt-1 block font-mono text-sm font-bold text-acid">
-                    €{option.price}
+                    {option.totalPrice
+                      ? `Aanbetaling €${option.price} · Totaal €${option.totalPrice}`
+                      : `€${option.price}`}
                   </span>
                 )}
                 <span className="mt-2 block font-body text-sm leading-relaxed text-bone/65">
