@@ -44,6 +44,7 @@ export default function Presale() {
 
     const response = await fetch("/api/presale", {
       method: "POST",
+      cache: "no-store",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });

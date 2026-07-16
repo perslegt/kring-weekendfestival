@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { unstable_noStore as noStore } from "next/cache";
 import {
   getAllSubmissions,
   type PresaleSubmission,
@@ -7,6 +8,7 @@ import {
 import { ActionControls, ConfirmationCheckbox } from "./RegistrationActions";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Registraties | Kring Weekendfestival",
@@ -70,7 +72,8 @@ function sortSubmissions(
 }
 
 async function loadSubmissions() {
-  return { submissions: await getAllSubmissions(), source: "JSON" };
+  noStore();
+  return { submissions: await getAllSubmissions(), source: "Vercel Blob JSON" };
 }
 
 function date(value?: string) {

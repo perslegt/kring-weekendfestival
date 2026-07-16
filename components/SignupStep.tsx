@@ -59,6 +59,7 @@ const campingOptions: Option[] = [
 async function saveStep(id: string, payload: Record<string, unknown>) {
   const response = await fetch("/api/presale", {
     method: "PATCH",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id, ...payload }),
   });

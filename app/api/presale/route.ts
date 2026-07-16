@@ -9,12 +9,19 @@ import {
   type SubmissionPatch,
 } from "@/lib/presale-db";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const noStoreHeaders = {
+  "Cache-Control": "no-store, max-age=0",
+};
+
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 function errorResponse(message: string, status: number) {
-  return NextResponse.json({ error: message }, { status });
+  return NextResponse.json({ error: message }, { status, headers: noStoreHeaders });
 }
 
 async function readJson(request: Request) {
@@ -80,7 +87,7 @@ export async function GET(request: Request) {
       return errorResponse("Inschrijving niet gevonden.", 404);
     }
 
-    return NextResponse.json({ submission });
+    return NextResponse.json({ submission }, { headers: noStoreHeaders });
   } catch (error) {
     return handleServerError(error);
   }
@@ -101,7 +108,10 @@ export async function POST(request: Request) {
 
   try {
     const submission = await createSubmission(email);
-    return NextResponse.json({ submission }, { status: 201 });
+    return NextResponse.json(
+      { submission },
+      { status: 201, headers: noStoreHeaders },
+    );
   } catch (error) {
     return handleServerError(error);
   }
@@ -167,7 +177,7 @@ export async function PATCH(request: Request) {
       return errorResponse("Inschrijving niet gevonden.", 404);
     }
 
-    return NextResponse.json({ submission });
+    return NextResponse.json({ submission }, { headers: noStoreHeaders });
   } catch (error) {
     return handleServerError(error);
   }

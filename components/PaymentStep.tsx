@@ -46,7 +46,7 @@ export default function PaymentStep() {
       return;
     }
 
-    fetch(`/api/presale?id=${signupId}`)
+    fetch(`/api/presale?id=${signupId}`, { cache: "no-store" })
       .then((response) => {
         if (!response.ok) throw new Error("Aanmelding niet gevonden");
         return response.json();
@@ -79,6 +79,7 @@ export default function PaymentStep() {
     try {
       const response = await fetch("/api/presale", {
         method: "PATCH",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: signupId, paymentConfirmed: true }),
       });
