@@ -12,22 +12,22 @@ const ticketConfig: Record<
   weekend: {
     label: "WEEKEND TICKET",
     price: 160,
-    qrSrc: "/weekend-tikkie.jpg?v=20260908",
+    qrSrc: "/weekend-tikkie.jpg?v=20260909",
   },
   friday: {
     label: "VRIJDAG TICKET",
     price: 85,
-    qrSrc: "/dag-tikkie.jpg?v=20260908",
+    qrSrc: "/dag-tikkie.jpg?v=20260909",
   },
   saturday: {
     label: "ZATERDAG TICKET",
     price: 85,
-    qrSrc: "/dag-tikkie.jpg?v=20260908",
+    qrSrc: "/dag-tikkie.jpg?v=20260909",
   },
   sunday: {
     label: "ZONDAG TICKET",
     price: 85,
-    qrSrc: "/dag-tikkie.jpg?v=20260908",
+    qrSrc: "/dag-tikkie.jpg?v=20260909",
   },
 };
 
